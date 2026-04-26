@@ -1,0 +1,105 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flare-po"
+version = "0.1.0"
+description = "POMDP wildfire UAV benchmark with mission-aware risk-adaptive planning (Paper 2)"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Konstantinos Zervakis", email = "zervakisai@gmail.com"},
+]
+keywords = ["pomdp", "uav", "wildfire", "reinforcement-learning", "benchmark"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+    "torch>=2.1",
+    "torchvision>=0.16",
+    "gymnasium>=0.29",
+    "stable-baselines3>=2.2",
+    "sb3-contrib>=2.2",
+    "numpy>=1.24",
+    "scipy>=1.11",
+    "numba>=0.58",
+    "matplotlib>=3.7",
+    "seaborn>=0.13",
+    "pandas>=2.0",
+    "pyarrow>=14.0",
+    "pyyaml>=6.0",
+    "tqdm>=4.65",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "black>=23.0",
+    "isort>=5.12",
+    "mypy>=1.7",
+    "ruff>=0.1",
+]
+gis = [
+    "osmnx>=1.7",
+    "rasterio>=1.3",
+    "geopandas>=0.14",
+    "pyproj>=3.6",
+    "shapely>=2.0",
+]
+ml = [
+    "wandb>=0.16",
+    "tensorboard>=2.15",
+]
+mcp = [
+    "mcp>=0.1",
+]
+all = ["flare-po[dev,gis,ml,mcp]"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["flare*"]
+exclude = ["tests*", "configs*", "scripts*", "checkpoints*"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "B", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = ["-ra", "--strict-markers", "--tb=short"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: integration tests",
+    "invariant: invariant tests (I1-I5)",
+]

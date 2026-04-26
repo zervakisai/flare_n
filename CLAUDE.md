@@ -946,10 +946,10 @@ Access: `claude mcp add --transport http flare https://mcp.flare-uav.dev`
 - [x] Phase 1.2: Wind kernel extracted to flare/core/wind.py (Alexandridis + cosine, 36 tests)
 - [x] Phase 1.3: Gaussian smoke plume → flare/core/hazards/smoke.py (FFT convolution, α_m=8700, Jin visibility, 22 tests)
 - [x] Phase 1.4: Dynamic NFZ → flare/core/hazards/nfz.py (Poisson arrival × geometric duration, 21 tests)
-- [ ] Phase 2.1: LiDAR sensor model (LD19)
-- [ ] Phase 2.2: GPS sensor model (BN-880)
-- [ ] Phase 2.3: Camera sensor model
-- [ ] Phase 2.4: Ray-cast engine (Numba)
+- [x] Phase 2.4: Numba Bresenham ray-cast → flare/sensors/ray_cast.py (cast_ray + cast_rays, smoke-coupled cutoff via Beer–Lambert ×2, 16 tests, 450-ray sweep < 5ms warm)
+- [x] Phase 2.1: LiDAR LD19 → flare/sensors/lidar.py (12m, 450 rays, σ_r=10mm+0.001·r, σ_θ=2°, 2% FN, 17 tests)
+- [x] Phase 2.3: Camera fire detection → flare/sensors/camera.py (130° HFOV, 30m, sector + range + LOS gating, 21 tests)
+- [x] Phase 2.2: GPS BN-880 + HMC5883L → flare/sensors/gps.py (CEP 2m, σ_ψ=1.5°, sigmoid urban-canyon dropout, Wiener DR drift, 19 tests)
 - [ ] Phase 3.1: Belief system (occupancy + certainty decay)
 - [ ] Phase 3.2: FLARE-PO Gymnasium env
 - [ ] Phase 3.3: MDP continuity test PASSES

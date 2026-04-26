@@ -943,9 +943,9 @@ Access: `claude mcp add --transport http flare https://mcp.flare-uav.dev`
 
 - [x] Project bootstrap (de93267)
 - [x] Phase 1.1: deterministic + stochastic CA fire (34 tests)
-- [ ] Phase 1.2: Wind kernel (anisotropic) — Alexandridis already in fire_deterministic; extract to flare/core/wind.py + add cosine alternative
-- [ ] Phase 1.3: Smoke plume (Gaussian + advection)
-- [ ] Phase 1.4: Dynamic NFZ
+- [x] Phase 1.2: Wind kernel extracted to flare/core/wind.py (Alexandridis + cosine, 36 tests)
+- [x] Phase 1.3: Gaussian smoke plume → flare/core/hazards/smoke.py (FFT convolution, α_m=8700, Jin visibility, 22 tests)
+- [x] Phase 1.4: Dynamic NFZ → flare/core/hazards/nfz.py (Poisson arrival × geometric duration, 21 tests)
 - [ ] Phase 2.1: LiDAR sensor model (LD19)
 - [ ] Phase 2.2: GPS sensor model (BN-880)
 - [ ] Phase 2.3: Camera sensor model

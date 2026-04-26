@@ -30,10 +30,10 @@ Part of FLARE-PO Paper 2.
 """
 from __future__ import annotations
 
-import math
-
 import numpy as np
 from scipy.ndimage import binary_dilation, uniform_filter
+
+from flare.core.wind import NEIGHBORS_DY_DX, alexandridis_wind_factors
 
 # Cell states (FD-1)
 UNBURNED: int = 0
@@ -50,18 +50,10 @@ _LANDUSE_PROB: dict[int, float] = {
     4: 0.00,  # water — never burns
 }
 
-# 8-connected Moore neighbourhood (FD-2).
-# (dy, dx) offsets in array coords; world direction computed via atan2(-dy, dx)
-# because the array row index increases southward while world y increases north.
-_NEIGHBORS: list[tuple[int, int]] = [
-    (-1, -1), (-1, 0), (-1, 1),
-    (0, -1),           (0, 1),
-    (1, -1),  (1, 0),  (1, 1),
-]
-
-# Alexandridis et al. (2008) wind constants — Eq. 4 of the paper.
-_WIND_C1: float = 0.045
-_WIND_C2: float = 0.131
+# 8-connected Moore neighbourhood, re-exported from :mod:`flare.core.wind`
+# for backwards compatibility with code that imports ``_NEIGHBORS`` from
+# this module.
+_NEIGHBORS: tuple[tuple[int, int], ...] = NEIGHBORS_DY_DX
 
 # Pre-computed Moore dilation structuring element.
 _MOORE_STRUCT: np.ndarray = np.ones((3, 3), dtype=bool)
@@ -96,8 +88,9 @@ class FireSpreadModel:
         Wind speed in m/s. ``0.0`` (default) disables wind for FD-5b backward
         compatibility (bit-identical to FLARE v2).
     wind_direction:
-        Wind direction in radians (FROM-direction in world frame, where x is
-        east and y is north). Ignored when ``wind_speed == 0``.
+        Wind direction in radians (TO-direction in world frame; see
+        :mod:`flare.core.wind` module docstring). Ignored when
+        ``wind_speed == 0``.
 
     Notes
     -----
@@ -165,19 +158,12 @@ class FireSpreadModel:
         self._prob_map[self._roads] *= 0.5
 
         # Wind modulation (FD-5b, WD-1: deterministic given identical params).
+        # The Alexandridis kernel lives in :mod:`flare.core.wind`; this class
+        # only stores the per-direction multipliers needed by the inner loop.
         self._wind_speed = wind_speed
-        self._wind_factors = np.ones(8, dtype=np.float32)
-        if wind_speed > 0.0:
-            for i, (dy, dx) in enumerate(_NEIGHBORS):
-                # _NEIGHBORS[i] = (dy, dx) is the offset to the BURNING
-                # neighbour. Spread direction is OPPOSITE: from burning TO
-                # candidate = (-dy, -dx). World coords: x = -dx (East),
-                # y = dy (North; array row inverted).
-                spread_angle = math.atan2(dy, -dx)
-                theta = spread_angle - wind_direction
-                self._wind_factors[i] = math.exp(
-                    wind_speed * (_WIND_C1 + _WIND_C2 * (math.cos(theta) - 1.0))
-                )
+        self._wind_factors = alexandridis_wind_factors(
+            wind_speed, wind_direction
+        )
 
         # Initial random ignitions for environmental hazards.
         if n_ignition > 0:

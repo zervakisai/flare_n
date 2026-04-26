@@ -950,9 +950,10 @@ Access: `claude mcp add --transport http flare https://mcp.flare-uav.dev`
 - [x] Phase 2.1: LiDAR LD19 → flare/sensors/lidar.py (12m, 450 rays, σ_r=10mm+0.001·r, σ_θ=2°, 2% FN, 17 tests)
 - [x] Phase 2.3: Camera fire detection → flare/sensors/camera.py (130° HFOV, 30m, sector + range + LOS gating, 21 tests)
 - [x] Phase 2.2: GPS BN-880 + HMC5883L → flare/sensors/gps.py (CEP 2m, σ_ψ=1.5°, sigmoid urban-canyon dropout, Wiener DR drift, 19 tests)
-- [ ] Phase 3.1: Belief system (occupancy + certainty decay)
-- [ ] Phase 3.2: FLARE-PO Gymnasium env
-- [ ] Phase 3.3: MDP continuity test PASSES
+- [x] Phase 3.1: Belief system → flare/belief/{memory_map,certainty_decay}.py (4×H_b×W_b global belief with simple-replace update + exponential certainty decay, 32 tests)
+- [x] Phase 3.2: FLARE-PO env → flare/envs/flare_pomdp.py (composes hazards + sensors + belief; Discrete(10) action incl. HOVER & SCAN360; check_env passes, 21 tests)
+- [x] Phase 3.x: Synthetic scenario → flare/scenarios/synthetic.py (parameterizable grid for env tests; OSM-free, 12 tests)
+- [ ] Phase 3.3: MDP continuity test (deferred — needs Paper 1 in-process wrapper / fixture file)
 - [ ] Phase 4.1: Insulin M(t) — Arrhenius
 - [ ] Phase 4.2: Hemorrhage M(t) — Weibull
 - [ ] Phase 4.3: All 8 M(t) implemented + tested

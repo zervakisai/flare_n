@@ -941,9 +941,9 @@ Access: `claude mcp add --transport http flare https://mcp.flare-uav.dev`
 
 ## STATUS TRACKER
 
-- [x] Project bootstrap (git init, venv, package tree, pyproject.toml, CLAUDE.md, README.md, .gitignore)
-- [ ] Phase 1.1: Stochastic CA fire
-- [ ] Phase 1.2: Wind kernel (anisotropic)
+- [x] Project bootstrap (de93267)
+- [x] Phase 1.1: deterministic + stochastic CA fire (34 tests)
+- [ ] Phase 1.2: Wind kernel (anisotropic) — Alexandridis already in fire_deterministic; extract to flare/core/wind.py + add cosine alternative
 - [ ] Phase 1.3: Smoke plume (Gaussian + advection)
 - [ ] Phase 1.4: Dynamic NFZ
 - [ ] Phase 2.1: LiDAR sensor model (LD19)
